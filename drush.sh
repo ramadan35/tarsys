@@ -1,0 +1,1 @@
+/home/app/drush/vendor/drush/drush/drush
