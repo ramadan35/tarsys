@@ -90,7 +90,7 @@ function current_project_form_alter(&$form, &$form_state, $form_id) {
   $current_project_node = node_load($current_project_id);
   if($form_id == 'purchase_request_node_form') {
     $form['title']['#default_value'] = $current_project_prefix . '-' . time();
-    $form['field_project_name']['und'][0]['target_id']['#default_value'] = $current_project_id;
+    $form['field_project_name']['und'][0]['target_id']['#default_value'] = array ($current_project_id => $current_project_node->title);
   }
   
 }
