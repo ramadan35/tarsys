@@ -1,0 +1,1 @@
+[Tue Dec 25 18:23:21.269079 2018] [php7:error] [pid 10740] [client 127.0.0.1:52902] PHP Fatal error:  Cannot redeclare current_project_block_view() (previously declared in /var/www/html/tarsys/sites/all/modules/tarsys/current_project/current_project.module:35) in /var/www/html/tarsys/sites/all/modules/tarsys/current_project/current_project.module on line 70

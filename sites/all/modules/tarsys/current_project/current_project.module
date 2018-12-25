@@ -1,0 +1,82 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function current_project_menu() {
+  $items['set_current_project/%'] = array(
+    'title' => 'Set Current Project',
+    'page callback' => 'set_current_project_callback',
+    'access arguments' => array('access_content'),
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+function set_current_project_callback() {
+  if(!is_numeric(arg(1))) {
+    echo json_encode("no project id");
+  }
+  $project_id = arg(1);
+  global $user;
+  $current_user = user_load($user->uid);
+  $current_user->field_current_project['und'][0]['target_id'] = $project_id;
+  user_save($current_user);
+  echo json_encode("success");
+}
+
+
+/**
+ * Implements hook_block_info().
+ */
+function current_project_block_info() {
+  $blocks = array();
+  $blocks['current_project_block'] = array(
+    'info' => t('Current Project Block'),
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function current_project_block_view($delta='') {
+  $block = array();
+  
+  switch($delta) {
+    case 'current_project_block' :
+      $block['content'] = current_project_block_content();
+      break;
+  }
+  
+  return $block;
+}
+
+/**
+ * Custom function to assemble renderable array for block content.
+ * Returns a renderable array with the block content.
+ * @return
+ *   returns a renderable array of block content.
+ */
+function current_project_block_content() {
+  global $user;
+  $current_user = user_load($user->uid);
+  $current_project_id = $current_user->field_current_project['und'][0]['target_id'];
+  $current_project_node = node_load($current_project_id);
+  $options = array();
+  $options[] = '- Select -'; 
+  foreach ($current_user->field_projects['und'] as $project) {
+    $project_node = node_load($project['target_id']);
+    $options[$project_node->nid] = $project_node->title;
+  }
+  $block = array();
+  $block = array(
+    'project' => array(
+        '#title' => t('Current Project') . ' (' . $current_project_node->title . ')',
+        '#type' => 'select',
+        '#description' => 'Select Current Project.',
+        '#options' => $options,
+        ),
+    ); 
+  return $block;
+}
