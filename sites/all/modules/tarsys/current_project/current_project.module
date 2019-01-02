@@ -80,3 +80,17 @@ function current_project_block_content() {
     ); 
   return $block;
 }
+
+function current_project_form_alter(&$form, &$form_state, $form_id) {
+  global $user;
+  $current_user = user_load($user->uid);
+  $current_project_id = $current_user->field_current_project['und'][0]['target_id'];
+  $current_project_node = node_load($current_project_id);
+  $current_project_prefix = $current_project_node->field_project_prefix['und'][0]['value'];
+  $current_project_node = node_load($current_project_id);
+  if($form_id == 'purchase_request_node_form') {
+    $form['title']['#default_value'] = $current_project_prefix . '-' . time();
+    $form['field_project_name']['und'][0]['target_id']['#default_value'] = array ($current_project_id => $current_project_node->title);
+  }
+  
+}
