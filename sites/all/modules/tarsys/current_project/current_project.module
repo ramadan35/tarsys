@@ -7,7 +7,7 @@ function current_project_menu() {
   $items['set_current_project/%'] = array(
     'title' => 'Set Current Project',
     'page callback' => 'set_current_project_callback',
-    'access arguments' => TRUE
+    'access arguments' => TRUE,
     'type' => MENU_CALLBACK
   );
   return $items;
